@@ -62,6 +62,7 @@ namespace laba1
             if (i < last) { razrNot(arr, i, last); sr++; }
                 dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
             dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
+            sr = 0;pr = 0;
         }
         void razrN(int[] arr, long first, long last)
         {
@@ -85,6 +86,7 @@ namespace laba1
             if (i < last) { razrN(arr, i, last); sr++; }
             dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
             dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
+            sr = 0; pr = 0;
         }
         int partN(int[] array, int start, int end)
         {
@@ -238,17 +240,14 @@ namespace laba1
             int[] numMas = new int[n];
             dataGridView1.Rows[0].Cells[0].Value = sortBox.SelectedItem;
             dataGridView1.Rows[0].Cells[1].Value = qntBox.SelectedItem;
-
-
-
             if (iMas == 0)
             {//массив записей
-                if (!File.Exists("D://usptu//2018//тпр//LABS//laba1//Katalog.csv"))
+                if (!File.Exists("...\\Katalog.csv"))
                 {
                     System.Console.WriteLine("Ошибка при загрузке записей каталога: файл отсутствует!");
                 }
                 Katalog[] st = new Katalog[n];
-                using (StreamReader reader = File.OpenText("D://usptu//2018//тпр//LABS//laba1//Katalog.csv"))
+                using (StreamReader reader = File.OpenText("...\\Katalog.csv"))
                 {
                     for (i = 0; i < n; i++)
                     {
@@ -281,16 +280,7 @@ namespace laba1
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
                     dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
                     dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
-                    for (i = 0; i < n; i++)
-                    {
-                        listBox2.Items.Add("_____");
-                        int g = i + 1;
-                        listBox2.Items.Add("№" + g);
-                        listBox2.Items.Add(st[i].authorName);
-                        listBox2.Items.Add(st[i].year);
-                        listBox2.Items.Add(st[i].bookName);
-                        listBox2.Items.Add(st[i].str);
-                    }
+                    sr = 0; pr = 0;
                 }
                 if (iSort == 1)
                 {//Выбором
@@ -327,16 +317,7 @@ namespace laba1
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
                     dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
                     dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
-                    for (i = 0; i < n; i++)
-                    {
-                        listBox2.Items.Add("_____");
-                        int g = i + 1;
-                        listBox2.Items.Add("№" + g);
-                        listBox2.Items.Add(st[i].authorName);
-                        listBox2.Items.Add(st[i].year);
-                        listBox2.Items.Add(st[i].bookName);
-                        listBox2.Items.Add(st[i].str);
-                    }
+                    sr = 0; pr = 0;
                 }
                 if (iSort == 2)
                 {//разрядная
@@ -346,16 +327,6 @@ namespace laba1
                     TimeSpan tSpan;
                     tSpan = watch.Elapsed;
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
-                    for (i = 0; i < n; i++)
-                    {
-                        listBox2.Items.Add("_____");
-                        int g = i + 1;
-                        listBox2.Items.Add("№" + g);
-                        listBox2.Items.Add(st[i].authorName);
-                        listBox2.Items.Add(st[i].year);
-                        listBox2.Items.Add(st[i].bookName);
-                        listBox2.Items.Add(st[i].str);
-                    }
                 }
                 if (iSort == 3)
                 {//qwik 
@@ -367,21 +338,54 @@ namespace laba1
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
                     dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
                     dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
+                    sr = 0; pr = 0;
+                }
+                using (StreamWriter sw = new StreamWriter("outKatalog.csv",true, Encoding.UTF8))
+                {
                     for (i = 0; i < n; i++)
                     {
+                        sw.Write(st[i].authorName);
+                        sw.Write(";");
+                        sw.Write(st[i].year);
+                        sw.Write(";");
+                        sw.Write(st[i].bookName);
+                        sw.Write(";");
+                        sw.Write(st[i].str);
+                        sw.Write(";");
+                       sw.WriteLine();
+                    }
+                }
+                using (StreamReader reader2 = File.OpenText("outKatalog.csv"))
+                {
+                    for (i = 0; i < n; i++)
+                    {
+                        string text = reader2.ReadLine();
+                        string[] elems = text.Split(';');
+                        string a = (elems[0]);
+                        int y = int.Parse(elems[1]);
+                        string b = (elems[2]);
+                        int s = int.Parse(elems[3]);
+                        st[i].authorName = a;
+                        st[i].year = y;
+                        st[i].bookName = b;
+                        st[i].str = s;
                         listBox2.Items.Add("_____");
                         int g = i + 1;
                         listBox2.Items.Add("№" + g);
-                        listBox2.Items.Add(st[i].authorName);
-                        listBox2.Items.Add(st[i].year);
-                        listBox2.Items.Add(st[i].bookName);
-                        listBox2.Items.Add(st[i].str);
+                        listBox2.Items.Add(a);
+                        listBox2.Items.Add(y);
+                        listBox2.Items.Add(b);
+                        listBox2.Items.Add(s);
                     }
                 }
             }
             if (iMas == 1)
             {//массив чисел
-                using (StreamReader reader1 = File.OpenText("D://usptu//2018//тпр//LABS//laba1//Numbers.csv"))
+                if (!File.Exists("...\\Numbers.csv"))
+                {
+                    System.Console.WriteLine("Ошибка при загрузке: файл c числами отсутствует!");
+                }
+                using (StreamReader reader1 = File.OpenText("...\\Numbers.csv"))
                 { for (i = 0; i < n; i++)
                     {
                         string text = reader1.ReadLine();
@@ -417,7 +421,7 @@ namespace laba1
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
                     dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
                     dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
-                    listBox2.DataSource = numMas;
+                    sr = 0; pr = 0;
                 }
                 if (iSort == 1)
                 {//Выбором
@@ -444,7 +448,7 @@ namespace laba1
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
                     dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
                     dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
-                    listBox2.DataSource = numMas;
+                    sr = 0; pr = 0;
                 }
                 if (iSort == 2)
                 { //разрядная
@@ -456,7 +460,7 @@ namespace laba1
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
                     dataGridView1.Rows[0].Cells[2].Value = sr.ToString();
                     dataGridView1.Rows[0].Cells[3].Value = pr.ToString();
-                    listBox2.DataSource = numMas;
+                    sr = 0; pr = 0;
                 }
                 if (iSort == 3)
                 { //qwik
@@ -466,9 +470,27 @@ namespace laba1
                     TimeSpan tSpan;
                     tSpan = watch.Elapsed;
                     dataGridView1.Rows[0].Cells[4].Value = tSpan.ToString();
-                    listBox2.DataSource = numMas;
+                }
+                using (StreamWriter sw = new StreamWriter("outNumbers.csv", true, Encoding.UTF8))
+                {
+                    for (i = 0; i < n; i++)
+                    {
+                        sw.Write(numMas[i]);
+                        sw.Write(";");
+                        sw.WriteLine();
+                    }
+                }
+                using (StreamReader reader2 = File.OpenText("outNumbers.csv"))
+                {
+                    for (i = 0; i < n; i++)
+                    {
+                        string text = reader2.ReadLine();
+                        string[] elems = text.Split(';');
+                        listBox2.Items.Add(int.Parse(elems[0]));
+                    }
                 }
             }
+
         }
             
             
